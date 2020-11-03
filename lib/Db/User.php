@@ -1,0 +1,89 @@
+<?php
+
+namespace OCA\UserWhiteList\Db;
+
+use OCP\AppFramework\Db\Entity;
+
+class User extends Entity
+{
+    const STATUS_ENABLE = 3;
+    const STATUS_DISABLE = 2;
+    const STATUS_TEMP = 1;
+
+    protected $name;
+    protected $remark;
+    protected $status;
+    protected $create;
+    protected $createUser;
+    protected $edit;
+    protected $editUser;
+
+    public function __construct()
+    {
+        $this->addType('status', 'integer');
+    }
+
+    public function columnToProperty($column)
+    {
+        if ($column === 'create_user') {
+            return 'createUser';
+        } elseif ($column === 'edit_user') {
+            return 'editUser';
+        } else {
+            return parent::columnToProperty($column);
+        }
+    }
+
+    public function propertyToColumn($property)
+    {
+        if ($property === 'createUser') {
+            return 'create_user';
+        } elseif ($property === 'editUser') {
+            return 'edit_user';
+        } else {
+            return parent::propertyToColumn($property);
+        }
+    }
+
+    public function temp()
+    {
+        $this->status = self::STATUS_TEMP;
+    }
+
+    public function enable()
+    {
+        $this->status = self::STATUS_ENABLE;
+    }
+
+    public function disable()
+    {
+        $this->status = self::STATUS_DISABLE;
+    }
+
+    public function isEnable($status = null)
+    {
+        $status = $status ?? $this->status;
+        return self::STATUS_ENABLE === $status;
+    }
+
+    public function setStatus($status)
+    {
+        if (!in_array($status, [self::STATUS_DISABLE, self::STATUS_ENABLE, self::STATUS_TEMP], true)) {
+            $this->status = self::STATUS_TEMP;
+        } else {
+            $this->status = $status;
+        }
+    }
+
+    public function setCreate()
+    {
+        if (!$this->create || '1000-01-01 00:00:00' === $this->create) {
+            $this->create = date('Y-m-d H:i:s');
+        }
+    }
+
+    public function setEdit()
+    {
+        $this->edit = date('Y-m-d H:i:s');
+    }
+}

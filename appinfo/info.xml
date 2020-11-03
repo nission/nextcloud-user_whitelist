@@ -1,0 +1,25 @@
+<?xml version="1.0"?>
+<info xmlns:xsi= "http://www.w3.org/2001/XMLSchema-instance"
+      xsi:noNamespaceSchemaLocation="https://apps.nextcloud.com/schema/apps/info.xsd">
+    <id>userwhitelist</id>
+    <name>User Whitelist</name>
+    <summary>Whitelist for user</summary>
+    <description><![CDATA[Whitelist for user]]></description>
+    <version>0.0.1</version>
+    <licence>agpl</licence>
+    <author mail="758190208@qq.com" >guochen</author>
+    <namespace>UserWhitelist</namespace>
+    <category>security</category>
+    <settings>
+        <admin>OCA\UserWhitelist\Settings\Admin</admin>
+        <admin-section>OCA\UserWhitelist\Settings\AdminSection</admin-section>
+    </settings>
+    <bugs>https://github.com/nission/nextcloud-user_whitelist/issues</bugs>
+    <dependencies>
+        <php min-version="5.6" min-int-size="64"/>
+        <database min-version="9.4">pgsql</database>
+        <database>sqlite</database>
+        <database min-version="5.5">mysql</database>
+        <nextcloud min-version="19" max-version="19"/>
+    </dependencies>
+</info>
