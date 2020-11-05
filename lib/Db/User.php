@@ -6,9 +6,9 @@ use OCP\AppFramework\Db\Entity;
 
 class User extends Entity
 {
-    const STATUS_ENABLE = 3;
-    const STATUS_DISABLE = 2;
     const STATUS_TEMP = 1;
+    const STATUS_ENABLE = 2;
+    const STATUS_DISABLE = 3;
 
     protected $name;
     protected $remark;
@@ -47,43 +47,44 @@ class User extends Entity
 
     public function temp()
     {
-        $this->status = self::STATUS_TEMP;
+        $this->setStatus(self::STATUS_TEMP);
     }
 
     public function enable()
     {
-        $this->status = self::STATUS_ENABLE;
+        $this->setStatus(self::STATUS_ENABLE);
     }
 
     public function disable()
     {
-        $this->status = self::STATUS_DISABLE;
+        $this->setStatus(self::STATUS_DISABLE);
     }
 
     public function isEnable($status = null)
     {
-        $status = $status ?? $this->status;
+        $status = $status ?? $this->getStatus();
+
         return self::STATUS_ENABLE === $status;
     }
 
-    public function setStatus($status)
+    public function setStatusWrapper($status)
     {
         if (!in_array($status, [self::STATUS_DISABLE, self::STATUS_ENABLE, self::STATUS_TEMP], true)) {
-            $this->status = self::STATUS_TEMP;
-        } else {
-            $this->status = $status;
+            $status = self::STATUS_TEMP;
+        }
+
+        $this->setStatus($status);
+    }
+
+    public function setCreateWrapper()
+    {
+        if (!$this->getCreate() || '1000-01-01 00:00:00' === $this->getCreate()) {
+            $this->setCreate(date('Y-m-d H:i:s'));
         }
     }
 
-    public function setCreate()
+    public function setEditWrapper()
     {
-        if (!$this->create || '1000-01-01 00:00:00' === $this->create) {
-            $this->create = date('Y-m-d H:i:s');
-        }
-    }
-
-    public function setEdit()
-    {
-        $this->edit = date('Y-m-d H:i:s');
+        $this->setEdit(date('Y-m-d H:i:s'));
     }
 }

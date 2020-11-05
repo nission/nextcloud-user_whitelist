@@ -2,11 +2,8 @@
 namespace OCA\UserWhitelist\Controller;
 
 use Exception;
-use OCA\UserWhitelist\Exception\WhitelistException;
-use OCA\UserWhitelist\Service\ApiService;
 use OCA\UserWhitelist\Service\WhitelistService;
 use OCP\AppFramework\Http\DataResponse;
-use OCP\AppFramework\OCS\OCSForbiddenException;
 use OCP\AppFramework\OCSController;
 use OCP\ILogger;
 use OCP\IRequest;
@@ -15,7 +12,7 @@ class ApiController extends OCSController
 {
     const SUCCESS = 200;
 
-    /** @var OCP\IRequest */
+    /** @var IRequest */
     protected $request;
     /** @var WhitelistService */
     private $whitelistService;
@@ -59,9 +56,9 @@ class ApiController extends OCSController
     public function sync()
     {
         $this->whitelistService->syncUser(
-            $this->request->getParam('username'),
-            $this->request->getParam('status'),
-            'sync by' . $this->request->getParam('admin')
+            $this->request->getParam('username', ''),
+            (int)$this->request->getParam('status', 0),
+            'sync by ' . $this->request->getParam('admin', '')
         );
 
         return new DataResponse(['msg' => 'success', 'code' => self::SUCCESS]);

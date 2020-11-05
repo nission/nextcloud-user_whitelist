@@ -10,7 +10,7 @@ use OCP\Settings\ISettings;
 class Admin implements ISettings {
 
     /**
-     * @var OCA\UserWhitelist\Service\WhitelistService $service
+     * @var WhitelistService $service
      */
     private $service;
     
@@ -23,7 +23,7 @@ class Admin implements ISettings {
 	 */
 	public function getForm() {
         $parameters = [
-            'users' => $this->service->paginationUser(0, 1)
+            'users' => $this->service->paginationUser(0, 100)
         ];
 
         return new TemplateResponse('userwhitelist', 'settings/index', $parameters, '');

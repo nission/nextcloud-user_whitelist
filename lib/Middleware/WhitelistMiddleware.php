@@ -37,14 +37,10 @@ declare(strict_types=1);
 
 namespace OCA\UserWhitelist\Middleware;
 
-use OCA\UserWhitelist\Service\ApiService;
 use OCA\UserWhitelist\Exception\WhitelistException;
+use OCA\UserWhitelist\Service\ApiService;
 use OCP\AppFramework\Controller;
-use OCP\AppFramework\Http\DataResponse;
-use OCP\AppFramework\Http\JSONResponse;
-use OCP\AppFramework\Http\RedirectResponse;
 use OCP\AppFramework\Http\Response;
-use OCP\AppFramework\Http\TemplateResponse;
 use OCP\AppFramework\Middleware;
 use OCP\AppFramework\OCS\OCSException;
 use OCP\AppFramework\OCS\OCSForbiddenException;
@@ -121,7 +117,7 @@ class WhitelistMiddleware extends Middleware
             $params = $this->request->getParams();
             $this->logger->warning(
                 'Request api params: {params}',
-                ['params' => json_encode($params)]
+                ['params' => http_build_query($params)]
             );
 
             if (!$this->api->isLegalRq($params)) {
@@ -142,8 +138,16 @@ class WhitelistMiddleware extends Middleware
      */
     public function afterException($controller, $methodName, \Exception $exception): Response
     {
+		$this->logger->error($exception->getMessage());
         if ($controller instanceof OCSController) {
-            throw new OCSException($exception->getMessage(), $exception->getCode());
+			$message = "Unkown Error";
+			$code = 999999;
+			if ($exception instanceof WhitelistException) {
+				$message = $exception->getMessage();
+				$code = $exception->getCode();
+			}
+
+            throw new OCSException($message, (int)sprintf('5%05d', $code), $exception);
         }
 
         throw $exception;

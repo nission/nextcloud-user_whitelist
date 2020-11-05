@@ -34,7 +34,7 @@ class Version001Date20200917112639 extends SimpleMigrationStep
       ]);
       $table->addColumn('remark', 'string', [
         'notnull' => true,
-        'length' => 64,
+        'length' => 1024,
         'default' => '',
         'comment' => '备注',
       ]);
@@ -51,6 +51,7 @@ class Version001Date20200917112639 extends SimpleMigrationStep
       $table->addColumn('create_user', 'string', [
         'notnull' => true,
         'default' => '',
+        'length' => 32,
         'comment' => '添加人员',
       ]);
       $table->addColumn('edit', 'datetime', [
@@ -60,6 +61,7 @@ class Version001Date20200917112639 extends SimpleMigrationStep
       ]);
       $table->addColumn('edit_user', 'string', [
         'notnull' => true,
+        'length' => 32,
         'default' => '',
         'comment' => '最后更新人员',
       ]);
