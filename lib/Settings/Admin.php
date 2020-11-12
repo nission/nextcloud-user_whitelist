@@ -3,7 +3,6 @@
 namespace OCA\UserWhitelist\Settings;
 
 use OCA\UserWhitelist\Service\WhitelistService;
-use OCA\UserWhiteList\Db\UserMapper;
 use OCP\AppFramework\Http\TemplateResponse;
 use OCP\Settings\ISettings;
 
