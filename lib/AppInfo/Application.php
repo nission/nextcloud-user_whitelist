@@ -25,18 +25,16 @@ class Application extends App
         $container->registerMiddleWare(WhitelistMiddleware::class);
 
         if (strpos($server->getRequest()->getPathInfo(), '/ocs/') !== 0) {
-            try {
-                $server->query(WhitelistService::class)->authorize();
-            } catch (UserNoAuthorizationException $e) {
-                $server->getUserSession()->logout();
-                $message = $server->getL10N('userwhitelist')->t('User not allowed, please contact admin');
-                throw new LoginException($message);
-            }
-
             // register login action
             /* @var IEventDispatcher $eventDispatcher */
             $dispatcher = $this->getContainer()->query(IEventDispatcher::class);
             $dispatcher->addServiceListener(PostLoginEvent::class, PostLoginListener::class);
+
+            try {
+                $server->query(WhitelistService::class)->authorize();
+            } catch (UserNoAuthorizationException $e) {
+                $server->getUserSession()->logout();
+            }
         }
     }
 }

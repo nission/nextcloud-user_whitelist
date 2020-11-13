@@ -138,10 +138,10 @@ class WhitelistMiddleware extends Middleware
      */
     public function afterException($controller, $methodName, \Exception $exception): Response
     {
-		$this->logger->error($exception->getMessage());
+        $this->logger->error($exception->getMessage());
         if ($controller instanceof OCSController) {
 			$message = "Unkown Error";
-			$code = 999999;
+			$code = 99999;
 			if ($exception instanceof WhitelistException) {
 				$message = $exception->getMessage();
 				$code = $exception->getCode();

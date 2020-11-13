@@ -27,17 +27,29 @@ class WhitelistService
     /** @var UserMapper $userMapper */
     private $userMapper;
     /** @var bool 是否为管理员 */
-    private $isAdmin;
+    private $isAdmin = false;
+    /** @var IUserSession $session */
+    private $session;
+    /** @var IGroupManager $group */
+    private $group;
+    private $initedUser = false;
 
     public function __construct(L10nFactory $l10n, IUserSession $session, IGroupManager $group, UserMapper $userMapper, ILogger $logger)
     {
         $this->l10n = $l10n->get('userwhitelist');
         $this->userMapper = $userMapper;
         $this->logger = $logger;
+        $this->session = $session;
+        $this->group = $group;
 
-        if ($user = $session->getUser()) {
+    }
+
+    protected function checkUser()
+    {
+        if (!$this->initedUser && $user = $this->session->getUser()) {
             $this->userId = $user->getUID();
-            $this->isAdmin = $group->isAdmin($this->userId);
+            $this->isAdmin = $this->group->isAdmin($this->userId);
+            $this->initedUser = true;
         }
     }
 
@@ -49,7 +61,7 @@ class WhitelistService
      */
     public function authorize()
     {
-        if ($this->userId && !$this->isAuthorize()) {
+        if (!$this->isAuthorize()) {
             throw new UserNoAuthorizationException($this->l10n->t('user forbidden'));
         }
     }
@@ -57,9 +69,11 @@ class WhitelistService
     /**
      * @throws UserNotExistException
      */
-    public function isAuthorize()
+    private function isAuthorize()
     {
-        if ($this->isAdmin) {
+        $this->checkUser();
+
+        if (!$this->userId || $this->isAdmin) {
             return true;
         }
 

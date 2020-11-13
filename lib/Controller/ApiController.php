@@ -32,7 +32,6 @@ class ApiController extends OCSController
      */
     public function add()
     {
-        throw new Exception('test', 1);
         $this->whitelistService->addUser($this->request->getParam('username'), 'add from admin');
 
         return new DataResponse(['msg' => 'success', 'code' => self::SUCCESS]);

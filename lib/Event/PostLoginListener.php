@@ -19,7 +19,7 @@ class PostLoginListener implements IEventListener {
             try {
                 $server->query(WhitelistService::class)->authorize();
             } catch (UserNoAuthorizationException $e) {
-                $message = \OC::$server->getL10N('userwhitelist')->t('User disabled');
+                $message = \OC::$server->getL10N('userwhitelist')->t('User not allowed, please contact admin');
                 throw new LoginException($message);
             }
         }

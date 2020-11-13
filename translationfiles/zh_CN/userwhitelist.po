@@ -19,7 +19,7 @@ msgstr ""
 
 #: /Users/guochen9/Weibo/nextcloud/dev/nextcloud/apps/userwhitelist/lib/AppInfo/Application.php:31
 msgid "User not allowed, please contact admin"
-msgstr "当前用户无权限，请联系管理员"
+msgstr "当前用户无权限，请联系管理员添加"
 
 #: /Users/guochen9/Weibo/nextcloud/dev/nextcloud/apps/userwhitelist/lib/Event/PostLoginListener.php:22
 msgid "User disabled"
